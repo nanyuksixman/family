@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>닌텐도 스위치 칩 무료 나눔 이벤트</title>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #ff4747; /* 닌텐도 레드 */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 첫 화면 (미끼) */
+        #page-intro h1 { color: #e60012; font-size: 24px; margin-bottom: 10px; }
+        .kirby-img { width: 150px; margin: 20px auto; display: block; animation: bounce 2s infinite; }
+        .btn {
+            background-color: #e60012;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            font-weight: bold;
+            box-shadow: 0 5px 0 #9f000c;
+            transition: transform 0.1s;
+        }
+        .btn:active { transform: translateY(5px); box-shadow: none; }
+
+        /* 설문 화면 */
+        #page-survey { display: none; text-align: left; }
+        .question { margin-bottom: 25px; }
+        .question label { display: block; font-weight: bold; margin-bottom: 8px; color: #333; }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input:focus, textarea:focus { border-color: #e60012; outline: none; }
+        
+        /* 완료 화면 */
+        #page-end { display: none; }
+
+        /* 애니메이션 */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .sub-text { font-size: 13px; color: #666; margin-top: 10px; line-height: 1.4; }
+    </style>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // 아빠가 말씀하신 Public Key 적용 완료
+            emailjs.init("1eClXvyi7Cegunx5J");
+        })();
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <div id="page-intro">
+            <h1>🎉 축하합니다! 🎉<br>닌텐도 스위치 칩 당첨!</h1>
+            <img src="https://upload.wikimedia.org/wikipedia/en/2/2d/SSU_Kirby_artwork.png" alt="Kirby" class="kirby-img">
+            <p style="font-weight: bold; font-size: 18px;">[별의 커비: 슈퍼 플라이]</p>
+            <p class="sub-text">
+                이벤트 당첨을 축하드립니다!<br>
+                아래 <b>'선물 받기'</b> 버튼을 누르고<br>
+                간단한 본인 확인을 하면 배송됩니다.
+            </p>
+            <button class="btn" onclick="showSurvey()">🎁 선물 받기 (터치)</button>
+        </div>
+
+        <div id="page-survey">
+            <h2 style="text-align: center; color: #e60012;">📋 당첨자 정보 입력</h2>
+            <p style="text-align: center; font-size: 14px; color: #666; margin-bottom: 20px;">
+                솔직하게 작성해야 선물이 발송됩니다!<br>(거짓말 탐지기 작동 중 🤖)
+            </p>
+
+            <form id="survey-form">
+                <div class="question">
+                    <label>1. 우리 가족 인기투표! (1등은 누구?)</label>
+                    <select id="q1_1" style="margin-bottom:5px;">
+                        <option value="">1등을 선택하세요</option>
+                        <option value="엄마">엄마</option>
+                        <option value="아빠">아빠</option>
+                        <option value="이수">이수</option>
+                    </select>
+                    <select id="q1_2" style="margin-bottom:5px;">
+                        <option value="">2등을 선택하세요</option>
+                        <option value="엄마">엄마</option>
+                        <option value="아빠">아빠</option>
+                        <option value="이수">이수</option>
+                    </select>
+                    <select id="q1_3">
+                        <option value="">3등을 선택하세요</option>
+                        <option value="엄마">엄마</option>
+                        <option value="아빠">아빠</option>
+                        <option value="이수">이수</option>
+                    </select>
+                </div>
+
+                <div class="question">
+                    <label>2. 아빠가 가~장 좋을 때는 언제인가요?</label>
+                    <input type="text" id="q2_dad" placeholder="예: 치킨 사줄 때, 놀아줄 때">
+                </div>
+
+                <div class="question">
+                    <label>3. 엄마가 가~장 좋을 때는 언제인가요?</label>
+                    <input type="text" id="q2_mom" placeholder="솔직하게 적어주세요">
+                </div>
+
+                <div class="question">
+                    <label>4. 동생 이수가 가~장 좋을 때는 언제인가요?</label>
+                    <input type="text" id="q2_isu" placeholder="이수가 좋을 때도 있나요?">
+                </div>
+
+                <div class="question">
+                    <label>5. 올해 엄마, 아빠에게 바라는 소원 한 가지!</label>
+                    <textarea id="q3_wish" rows="3" placeholder="준수의 소원을 적어주세요."></textarea>
+                </div>
+
+                <button type="button" class="btn" onclick="sendEmail()">🚀 입력 완료하고 선물 받기</button>
+            </form>
+        </div>
+
+        <div id="page-end">
+            <h1>접수 완료! 🚚</h1>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Nintendo_Switch_logo.svg/1024px-Nintendo_Switch_logo.svg.png" alt="Switch" style="width: 100px; margin: 20px 0;">
+            <p style="font-size: 18px; font-weight: bold;">
+                준수님의 솔직한 답변이<br>닌텐도 본사(?)로 전송되었습니다.
+            </p>
+            <p class="sub-text">
+                내용 확인 후 합격하면<br>
+                집으로 선물이 배송됩니다!<br>
+                (엄마 아빠 말씀 잘 듣고 있으면 더 빨리 옴)
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function showSurvey() {
+            document.getElementById('page-intro').style.display = 'none';
+            document.getElementById('page-survey').style.display = 'block';
+        }
+
+        function sendEmail() {
+            const btn = document.querySelector('#page-survey .btn');
+            btn.innerText = '전송 중... 잠시만요!';
+            btn.disabled = true;
+
+            // 입력값 가져오기
+            var templateParams = {
+                rank_1: document.getElementById('q1_1').value,
+                rank_2: document.getElementById('q1_2').value,
+                rank_3: document.getElementById('q1_3').value,
+                best_dad: document.getElementById('q2_dad').value,
+                best_mom: document.getElementById('q2_mom').value,
+                best_isu: document.getElementById('q2_isu').value,
+                wish: document.getElementById('q3_wish').value
+            };
+
+            // 유효성 검사
+            if(!templateParams.rank_1 || !templateParams.best_dad || !templateParams.wish) {
+                alert("빈칸을 모두 채워야 선물을 받을 수 있어요!");
+                btn.innerText = '🚀 입력 완료하고 선물 받기';
+                btn.disabled = false;
+                return;
+            }
+
+            // 아빠가 말씀하신 Service ID, Template ID 적용 완료
+            emailjs.send('service_yzbru09', 'template_ynu7hlo', templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    document.getElementById('page-survey').style.display = 'none';
+                    document.getElementById('page-end').style.display = 'block';
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    alert("전송에 실패했어요 ㅠㅠ 다시 시도해주세요.");
+                    btn.innerText = '🚀 입력 완료하고 선물 받기';
+                    btn.disabled = false;
+                });
+        }
+    </script>
+</body>
+</html>
